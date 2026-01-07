@@ -548,10 +548,10 @@ def send_presence(num, type_):
     """Envia status: 'composing' (digitando) ou 'paused'."""
     # Mapeamento para nova API
     # Nova API aceita: composing, recording, available, unavailable
-    # paused -> available (ou unavailable, mas available para parar de digitar)
+    # UPDATE: 'paused' agora suportado nativamente
     status_map = {
         "composing": "composing",
-        "paused": "available" 
+        "paused": "paused"
     }
     whatsapp.send_presence(num, status_map.get(type_, "available"))
 

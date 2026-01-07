@@ -65,9 +65,11 @@ class WhatsAppAPI:
         }
         
         try:
-            requests.post(url, headers=self._get_headers(), json=payload, timeout=5)
+            resp = requests.post(url, headers=self._get_headers(), json=payload, timeout=5)
+            resp.raise_for_status()
             return True
-        except Exception:
+        except Exception as e:
+            logger.error(f"Erro send_presence: {e}")
             return False
 
     def mark_as_read(self, chat_id: str) -> bool:
