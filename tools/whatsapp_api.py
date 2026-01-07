@@ -72,6 +72,40 @@ class WhatsAppAPI:
             logger.error(f"Erro send_presence: {e}")
             return False
 
+    def set_webhook(self, url: str, enabled: bool = True) -> bool:
+        """
+        Configura o Webhook da instância
+        POST /instance/webhook
+        Body: { "url": "...", "enabled": true }
+        """
+        if not self.base_url or not url: return False
+        
+        # Ajuste para endpoint de instância (baseado no log de erro visto anteriormente)
+        # O log mostrava: http://.../instance/{id}/logout
+        # Vamos assumir que existe /webhook ou /instance/webhook na raiz ou relativo
+        
+        # Tentativa 1: Endpoint padrão da API (Evolution/Whatsmeow-based)
+        target_url = f"{self.base_url}/webhook"
+        
+        payload = {
+            "url": url,
+            "enabled": enabled,
+        }
+        
+        logger.info(f"🔗 Configurando Webhook: {target_url} -> {url}")
+        
+        try:
+            resp = requests.post(target_url, headers=self._get_headers(), json=payload, timeout=10)
+            if resp.status_code == 200:
+                logger.info(f"✅ Webhook configurado com sucesso!")
+                return True
+            else:
+                logger.warning(f"⚠️ Falha ao configurar webhook ({resp.status_code}): {resp.text}")
+                return False
+        except Exception as e:
+            logger.error(f"Erro ao configurar webhook: {e}")
+            return False
+
     def mark_as_read(self, chat_id: str) -> bool:
         """
         Marca a conversa como lida (Tick Azul)

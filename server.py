@@ -41,6 +41,21 @@ logger = setup_logger(__name__)
 
 app = FastAPI(title="Agente de Supermercado", version="1.6.0") # FORCE UPDATE CHECK
 
+@app.on_event("startup")
+async def startup_event():
+    logger.info("🚀 Iniciando Agente de Supermercado...")
+    
+    # Configurar Webhook se URL estiver definida
+    if settings.webhook_url:
+        logger.info(f"⚙️ Configurando Webhook automático: {settings.webhook_url}")
+        success = whatsapp.set_webhook(settings.webhook_url)
+        if success:
+            logger.info("✅ Webhook registrado com sucesso na inicialização.")
+        else:
+            logger.error("❌ Falha ao registrar webhook na inicialização.")
+    else:
+        logger.warning("⚠️ WEBHOOK_URL não definida no .env. O agente não receberá mensagens.")
+
 # --- Models ---
 class WhatsAppMessage(BaseModel):
     telefone: str

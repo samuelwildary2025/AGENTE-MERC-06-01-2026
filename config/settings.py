@@ -56,6 +56,7 @@ class Settings(BaseSettings):
     # WhatsApp API (Nova Integração)
     whatsapp_api_base_url: str = "https://sistema-whatsapp-api.5mos1l.easypanel.host"
     whatsapp_instance_token: Optional[str] = None  # Header: X-Instance-Token
+    webhook_url: Optional[str] = None  # URL pública do agente para receber webhooks
     
     # WhatsApp / UAZ API (Legado/Compatibilidade)
     whatsapp_api_url: Optional[str] = None 
